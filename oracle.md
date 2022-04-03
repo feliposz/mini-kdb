@@ -1,5 +1,11 @@
 # Oracle
 
+Referência e exemplos (snippets) de comandos SQL e PL/SQL e outras ferramentas para Oracle Database.
+
+> **Aviso:** Os comandos foram usados e testados nas versões 9, 10 e 11.
+
+# SQL
+
 ## Sintaxe de consultas
 
 ~~~sql
@@ -212,7 +218,7 @@ TRUNC(DBMS_RANDOM.VALUE(1,10))
                              7
 ~~~
 
-------
+
 
 
 ## Versão do Oracle
@@ -222,7 +228,7 @@ SELECT * FROM v$version WHERE banner LIKE 'Oracle%';
 ~~~
 
 
-------
+
 
 ## Transações
 
@@ -234,7 +240,7 @@ SELECT * FROM v$version WHERE banner LIKE 'Oracle%';
 
 `ROLLBACK TO nome_do_ponto`: Reverte todas as alterações feitas após o savepoint.
 
-------
+
 
 Manipulação de dados
 --------------------
@@ -282,7 +288,7 @@ Atenção:
 - NÃO retorna o valor "atual" da sequence!
 - Só funciona se NEXTVAL foi usado antes.
 
-------
+
 
 Sintaxe "clássica" para JOINs
 -----
@@ -376,7 +382,7 @@ FROM tab1 a FULL OUTER JOIN tab2 b
   ON a.c1 = b.c1 AND a.c2 = b.c2;
 ~~~
 
-------
+
 
 Hints
 -----
@@ -399,7 +405,7 @@ Referências:
 - <http://www.devmedia.com.br/utilizando-hints-no-oracle/4557>
 - <https://docs.oracle.com/cd/B12037_01/server.101/b10752/hintsref.htm>
 
-------
+
 
 Tabelas
 -------
@@ -498,7 +504,7 @@ Consultando views: Acesse USER_VIEWS
 Para verificar as colunas de uma view que podem sofrer alteração: USER_UPDATABLE_COLUMNS
 
 
-------
+
 
 Recuperar tabela excluída
 -------------------------
@@ -537,7 +543,7 @@ Para limpar a "lixeira":
 PURGE RECYCLEBIN;
 ~~~
 
-------
+
 
 Recuperar dados de uma tabela em um determinado momento
 -------------------------------------------------------
@@ -581,7 +587,7 @@ Tabela criada.
 1 linha selecionada.
 ~~~
 
-------
+
 
 Índices
 -------
@@ -604,7 +610,7 @@ Dicionário de dados:
 - USER_INDEXES
 - USER_IND_COLUMNS
 
-------
+
 
 Alterações de tabelas
 ---------------------
@@ -633,7 +639,6 @@ Tornar coluna obrigatória/opcional:
 ALTER TABLE nome_tabela
 MODIFY (nome_coluna NULL)
 
-~~~sql
 ALTER TABLE nome_tabela
 MODIFY (nome_coluna NOT NULL)
 ~~~
@@ -675,7 +680,7 @@ ALTER TABLE tabela
 ENABLE CONSTRAINT nome_constraint
 ~~~
 
-------
+
 
 Dicionário do esquema
 ---------------------
@@ -715,7 +720,7 @@ Direitos de acesso:
 - USER_COL_PRIVS_MADE
 - USER_COL_PRIVS_RECD
 
-------
+
 
 Controle de acesso
 ------------------
@@ -796,7 +801,7 @@ CREATE PUBLIC SYNONYM def FOR usuario.objeto
 DROP SYNONYM xyz
 ~~~
 
-------
+
 
 Sequências
 ----------
@@ -832,14 +837,14 @@ VALUES (seq_funcionario_id.NEXTVAL, 'JOAO')
 ~~~
 
 
-------
+
 
 Subqueries
 ----------
 
 Valor único:
 
-Ex: Funcionários com o mesmo cargo do funcionário 'Silva'.
+- Ex: Funcionários com o mesmo cargo do funcionário 'Silva'.
 
 ~~~sql
 SELECT sobrenome, cargo
@@ -849,7 +854,7 @@ WHERE cargo = (SELECT cargo
                WHERE sobrenome = 'Silva');
 ~~~
 
-Ex: Funcionários com salário abaixo da média:
+- Ex: Funcionários com salário abaixo da média:
 
 ~~~sql
 SELECT sobrenome, cargo, salario
@@ -859,7 +864,7 @@ WHERE salario < (SELECT AVG(salario) FROM funcionario);
 
 Múltiplos valores:
 
-Ex: Funcionários em departamentos em que a região é 2.
+- Ex: Funcionários em departamentos em que a região é 2.
 
 ~~~sql
 SELECT sobrenome, nome, cargo
@@ -886,7 +891,7 @@ WHERE NOT coluna < ANY (SELECT coluna FROM outra_tabela WHERE ...);
 
 OBS: = ANY é equivalente a IN, enquanto != ALL é equivalente a NOT IN
 
-Ex: Médias de salários por departamento maiores que a média do departamento 32
+- Ex: Médias de salários por departamento maiores que a média do departamento 32
 
 ~~~sql
 SELECT depart_id, AVG(salario)
@@ -910,7 +915,7 @@ SELECT nome, cargo, salario
 
 Subquerie correlacionada:
 
-Ex: Retorna clientes ativos que possuem compras de pelo menos 100 reais
+- Ex: Retorna clientes ativos que possuem compras de pelo menos 100 reais
 
 ~~~sql
 SELECT nome
@@ -923,7 +928,7 @@ SELECT nome
               );
 ~~~
 
-Ex: Inativa clientes que não tenham feito pedidos no último ano
+- Ex: Inativa clientes que não tenham feito pedidos no último ano
 
 ~~~sql
 UPDATE cliente c
@@ -935,7 +940,7 @@ UPDATE cliente c
                   );
 ~~~
 
-Ex: Atualiza a coluna ULTIMO_PAGTO da tabela cliente com o último pagamento realizado daquele cliente
+- Ex: Atualiza a coluna ULTIMO_PAGTO da tabela cliente com o último pagamento realizado daquele cliente
 
 ~~~sql
 UPDATE cliente c
@@ -945,7 +950,7 @@ UPDATE cliente c
                       );
 ~~~
 
-Ex: Conta o número de funcionários por departamento (não requer JOIN, GROUP BY, ordenação, etc)
+- Ex: Conta o número de funcionários por departamento (não requer JOIN, GROUP BY, ordenação, etc)
 
 ~~~sql
 SELECT id_depto,
@@ -969,7 +974,7 @@ SELECT d.id_depto,
  GROUP BY d.id_depto, d.nome ;
 ~~~
 
-Inline views/Pre-query:
+## Inline views/Pre-query
 
 Equivalente aos anteriores.
 
@@ -986,7 +991,7 @@ SELECT d.id_depto,
  WHERE d.id_depto = f.id_depto (+);
 ~~~
 
-------
+
 
 ## Queries hierárquicas (CONNECT BY)
 
@@ -1011,7 +1016,7 @@ SELECT level, i.descricao, x.*
  connect by prior id_ccg_movto = id_ccg_mv_grupo;
 ~~~
 
-------
+
 
 ## "Fabricação" de datasets
 
@@ -1110,7 +1115,7 @@ with recurse_num(num) as (
 SELECT num from recurse_num;
 ~~~
 
-------
+
 
 ## Operações de conjunto
 
@@ -1142,7 +1147,7 @@ SELECT g, h, i FROM tabela3
 ORDER BY b; -- O nome da coluna deve ser o mesmo do primeiro select ou para evitar confusão, usar a posição (neste caso 2)
 ~~~
 
-------
+
 
 ## Tempo e intervalos:
 
@@ -1192,7 +1197,7 @@ SELECT INTERVAL '5-2' YEAR TO MONTH FROM DUAL;
 SELECT INTERVAL '0 3:16:23.45' DAY TO SECOND FROM DUAL;
 ~~~
 
-------
+
 
 Manipulação de ordenação
 ------------------------
@@ -1225,7 +1230,7 @@ Para forçar uma ordenação independente da variável de ambiente:
 SELECT * from loja where codmloja like '%713' order by NLSSORT(codmloja,'NLS_SORT=BINARY_AI');
 ~~~
 
-------
+
 
 Funções analíticas (analytics)
 ------------------------------
@@ -1333,7 +1338,7 @@ SELECT listagg('''' || documento || '''', ', ') within group (order by documento
  where rownum <= 35;
 ~~~
 
-------
+
 
 Performance
 -----------
@@ -1352,10 +1357,10 @@ ANALYZE TABLE nome_tabela ESTIMATE STATISTICS SAMPLE 10 PERCENT;
 ANALYZE TABLE nome_tabela ESTIMATE STATISTICS SAMPLE 500 ROWS;
 ~~~
 
-------
 
-PL/SQL
-------
+
+# PL/SQL
+
 
 Atribuição é `:=`
 
@@ -1773,7 +1778,7 @@ BEGIN
   SELECT * INTO emp_tab(100) FROM employees WHERE employee_id = 100;
 END;
 /
-~~~sql
+~~~
 
 ## Tabela de registros na memória
 
@@ -1809,7 +1814,7 @@ end;
 exec dbms_lock.sleep(10);
 ~~~
 
-------
+
 
 ## Tratando erros:
 
@@ -1995,7 +2000,7 @@ END;
 /
 ~~~
 
-------
+
 
 # Scripts SQL*Plus:
 
@@ -2134,9 +2139,9 @@ Remover totais:
 CLEAR COMPUTES
 ~~~
 
-------
 
-# Variáveis do SQL*PLUS
+
+## Variáveis do SQL*PLUS
 
 Uso: 
 
@@ -2155,7 +2160,7 @@ EXECUTE SELECT SYSDATE INTO :hoje FROM DUAL;
 PRINT hoje
 ~~~
 
-------
+
 
 Grava as configurações atuais do SQL*PLUS:
 
@@ -2169,7 +2174,7 @@ Restaura as configurações gravadas por STORE SET:
 @original_settings
 ~~~
 
-------
+
 
 ## Listar comandos do SQL*PLUS
 
@@ -2232,15 +2237,21 @@ QUIT        | Sai do SQL*PLUS
 RECOVER     | Usado para restaurar backup 
 
 
-------
 
-# Scripts de conexão
 
--- Conexão ao banco
+## Scripts de conexão
+
+Conexão ao banco
+
+~~~sql
 CONNECT usuario@banco/senha
+~~~
 
--- Formatação da saída
+Formatação da saída
+
+~~~sql
 SET LINES 1000 PAGES 200 WRAP OFF DEFINE ON LINESIZE 3000
+~~~
 
 - `PAGES[IZE]`: Número de linhas por página na saída de uma consulta. Inclui o cabeçalho mais o espaço entre página (3 linhas).
 - `WRAP ON/OFF`: Define se linhas serão truncadas ou se haverá quebra de linha se largura da saída exceder o LINESIZE.
@@ -2300,7 +2311,7 @@ NLS_TIME_TZ_FORMAT             HH24:MI:SSXFF TZR
 NLS_TIMESTAMP_TZ_FORMAT        DD/MM/RR HH24:MI:SSXFF TZR
 ~~~
 
--- Altera timezone / fuso horário:
+Altera timezone / fuso horário:
 
 ~~~sql
 ALTER SESSION SET TIME_ZONE = '-08:00';            -- Fuso horário GMT -08:00
@@ -2365,17 +2376,22 @@ $ comando
 O comando SET altera o valor de uma variável de sistema enquanto o comando SHOW mostra o valor atual da mesma.
 
 
-------
+# Utilidades
 
 ## Calcular tempo de execução
 
+~~~sql
 DECLARE
   v_inicio  TIMESTAMP; -- Tipo de dados que permite uma maior precisão nas frações de segundo
   v_fim     TIMESTAMP;
   v_duracao INTERVAL DAY(9) TO SECOND(6); -- Tipo de dado no resultado do cálculo da diferença de 2 timestamps
 BEGIN
   v_inicio  := SYSTIMESTAMP;
+
+
   -- Código cujo tempo de execução será calculado
+
+
   v_fim     := SYSTIMESTAMP;
   v_duracao := v_fim - v_inicio;
   DBMS_OUTPUT.PUT_LINE('Início:  ' || TO_CHAR(v_inicio,  'HH24:MI:SS.FF'));
@@ -2383,14 +2399,96 @@ BEGIN
   DBMS_OUTPUT.PUT_LINE('Duração: ' || TO_CHAR(v_duracao));
 END;
 /
+~~~
 
-------
+## PROFILER
 
-## Função Tabela
+Pré-requisitos:
+
+- Ter acesso à package dbms_profiler
+- Ter criadas as tabelas do profiler no schema local ($ORACLE_HOME/rdbms/admin/proftab.sql)
+
+Exemplo de utilização:
+
+~~~sql
+ALTER session set TIMED_STATISTICS = true;
+
+declare
+  x integer;
+  q integer := 0;
+BEGIN
+  x:=dbms_profiler.start_profiler('Test Profiler');
+  for reg in ( select * from table(fnc_arquivo_0104(70954)) ) loop
+    q := q + 1;
+  end loop;
+  dbms_output.put_line(q);
+  x:=dbms_profiler.flush_data;
+  x:=dbms_profiler.stop_profiler;
+end;
+/
+~~~
+
+Execuções:
+
+~~~sql
+SELECT a.runid,
+       substr(b.run_comment, 1, 30) as run_comment,
+       decode(a.unit_name, '', '<anonymous>',
+             substr(a.unit_name,1, 30)) as object_name,
+       a.total_time,
+       TO_CHAR(a.total_time/1000000, '99999.99') as msec,
+       TO_CHAR(100*a.total_time/b.run_total_time, '999.9') as pct
+from plsql_profiler_units a, plsql_profiler_runs b
+where a.runid=b.runid
+order by a.runid asc;
+~~~
+
+Tempo gasto por unidade
+
+~~~sql
+SELECT u.UNIT_NUMBER
+     , u.UNIT_TYPE
+     , u.UNIT_OWNER
+     , u.UNIT_NAME
+     , sum(d.TOTAL_TIME) / 1000000000 as segundos
+     , count(*) AS linhas
+from plsql_profiler_units u, plsql_profiler_data d
+where u.runid = d.runid
+  and u.unit_number = d.unit_number
+  and u.runid = &1
+group by u.UNIT_NUMBER
+     , u.UNIT_TYPE
+     , u.UNIT_OWNER
+     , u.UNIT_NAME
+     , u.runid
+order by segundos;
+~~~
+
+Tempo gasto por linha:
+
+~~~sql
+SELECT u.UNIT_NAME
+     , d.LINE#
+     , d.TOTAL_TIME / 1000000000 as segundos
+     , s.text
+from plsql_profiler_units u, plsql_profiler_data d, user_source s
+where u.runid = d.runid
+  and u.unit_number = d.unit_number
+  and u.runid = &1
+  and u.UNIT_NAME = '&2'
+  and u.unit_name = s.name
+  and d.line# = s.line
+order by segundos;
+undef 1
+undef 2
+~~~
+
+
+## Função-Tabela
 
 Uma função que retorna uma tabela definida como resultado.
 
-O tipo pode ser criado em uma package também
+O tipo de retorno pode ser criado em uma package também.
 
 ~~~sql
 CREATE OR REPLACE TYPE r_tabuada IS OBJECT (
@@ -2427,7 +2525,7 @@ Obtendo o resultado:
 SELECT * FROM TABLE(fnc_tabuada(3));
 ~~~
 
-------
+
 
 ## Packages
 
@@ -2492,7 +2590,7 @@ Vantagens:
 - Modularidade.
 - Economia de memória (somente uma cópia do pacote para todos os usuários).
 
-------
+
 
 ## Triggers
 
@@ -2539,7 +2637,7 @@ END;
 - A execução do trigger pode ser antes ou após o comando (BEFORE/AFTER)
 - O trigger BEFORE pode cancelar a execução do comando, o AFTER não
 
-------
+
 
 ## Gravação e leitura de arquivos no servidor Oracle
 
@@ -2640,7 +2738,7 @@ Verificar:
 3. Verificar se há permissão para acessar ao arquivo.
 
 
-------
+
 
 ## Inserção em múltiplas tabelas simultaneamente
 
@@ -2687,7 +2785,7 @@ FROM tabela_origem
 WHERE ...;
 ~~~
 
-------
+
 
 Expressões regulares
 --------------------
@@ -2714,152 +2812,18 @@ Procura pela expressão regular 'expressao' no texto e troca pelo texto substitu
 
 ~~~sql
 REGEXP_REPLACE(textp, 'expressao', substituto)
-  ~~~
+~~~
 
-Ex: Pega somente primeiro e último nome.
+Pega somente primeiro e último nome:
 
 ~~~sql
-regexp_replace(nome, '^(\w+) .* (\w+)$', '\1 \2')
-~~~
-
-------
-
-SQL LOADER
-----------
-
-Primeiro a tabela deve ser criada e deve estar vazia. Exemplo:
-
-~~~sql
-CREATE table tmp_crivo (
-  cpf   varchar2(11) not null primary key,
-  renda number(10,2) not null
-);
-~~~
-
-### Exemplos do comando para importação:
-
-    sqlldr usuario/senha@servidor control=CONTROLE.ctl bad=ERROS.bad discard=IGNORADO.dsc log=MENSAGENS.log
-
-As diretivas acima são bad (linhas com erro), discard (linhas não processadas), log (mensagens e erros na importação)
-
-### Exemplos do arquivo de controle (*.ctl):
-
-Arquivo simples somente com um campo
-
-~~~
-load data
- infile 'C:\Temp\CPFs_ja_importados.txt'
- into table tmp_cpf_vcom
- FIELDS TERMINATED BY "," OPTIONALLY ENCLOSED BY '"'
- TRAILING NULLCOLS
- ( cpf )
-~~~
-
-Arquivo csv com vários campos, sem formatação especifica
-
-~~~
-load data
- infile 'C:\Temp\cartoes_cvv_gold.csv'
- into table tmp_22188
- FIELDS TERMINATED BY "," OPTIONALLY ENCLOSED BY '"'
- TRAILING NULLCOLS
- ( ciccli, nome, id_cartao_antigo, layout, titularidade, id_cliente_conjunto )
-~~~
-
-Arquivo csv com formatação específica em cada campo
-
-~~~
-load data
- infile 'C:\temp\baixas_vcom_20130502.csv'
- into table tmp_baixas_vcom
- FIELDS TERMINATED BY "," OPTIONALLY ENCLOSED BY '"'
- TRAILING NULLCOLS
- ( nome_cred             "trim(:nome_cred)"
- , nome_fili_distr       "trim(:nome_fili_distr)"
- , sigla
- , cod_rec
- , contrato_tit
- , numero_parc
- , tipo_pagamento
- , vcto_parc             "to_date(:vcto_parc,   'YYYY-MM-DD HH24:MI:SS    ')"
- , dt_pgto_rec           "to_date(:dt_pgto_rec, 'YYYY-MM-DD HH24:MI:SS    ')"
- , atraso
- , valor_atualizado      "to_number(replace(:valor_atualizado,    '.', ''))"
- , valor_recebido_rec    "to_number(replace(:valor_recebido_rec,  '.', ''))"
- , percentual_comissao   "to_number(replace(:percentual_comissao, '.', ''))"
- , comissao              "to_number(replace(:comissao,            '.', ''))"
- )
-~~~
-
-Arquivo csv com 2 campos, um deles é numérico na origem mas deve ser formatado como char ao inserir na tabela
-
-~~~
-load data
- infile 'C:\Temp\crivo_renda.csv'
- into table usuario.tmp_crivo
- FIELDS TERMINATED BY ";" OPTIONALLY ENCLOSED BY '"'
- TRAILING NULLCOLS
- ( cpf                   "to_char(:cpf, 'fm00000000000')"
- , renda                 "to_number(:renda)"
- )
-~~~
-
-Exemplo complexo:
-- Múltiplos arquivos de entrada
-- Múltiplas tabelas de destino (com relação de mestre-detalhe)
-- Campos posicionais de vários formatos
-
-~~~
-load data
-infile 'c:\temp\cobranca\chefaly\2009\r0063001.cob'
-infile 'c:\temp\cobranca\chefaly\2009\r0063002.cob'
-infile 'c:\temp\cobranca\chefaly\2009\r0063003.cob'
-append
-trailing nullcols
-
-into table chefaly_arquivo
-when (1:2) = 'HD'
-(
-  id_chefaly_arquivo  "seq_id_chefaly_arquivo.nextval",
-  id_cobradora        position(3  :  6),
-  data_arquivo        position(157:164)  "to_date(:data_arquivo, 'DDMMYYYY')",
-  numero_arquivo      position(165:172)  "to_number(:numero_arquivo)"
-)
-
-into table chefaly_faixa
-when (1:2) = 'FX'
-(
-  id_chefaly_arquivo  "seq_id_chefaly_arquivo.currval",
-  faixa_ini           position(3: 6)     "to_number(:faixa_ini)",
-  faixa_fim           position(7:10)     "to_number(:faixa_fim)"
-)
-
-into table chefaly_totais
-when (1:2) = 'TR'
-(
-  id_chefaly_arquivo  "seq_id_chefaly_arquivo.currval",
-  qtd_clientes        position( 3:12)    "to_number(:qtd_clientes)",
-  qtd_dividas         position(13:22)    "to_number(:qtd_dividas)",
-  total_arquivo       position(23:39)    "to_number(:total_arquivo)/100"
-)
-
-into table chefaly_detalhe
-when (1:2) = 'DV'
-(
-  id_chefaly_arquivo  "seq_id_chefaly_arquivo.currval",
-  cod_operacao        position( 3: 3),
-  ciccli              position( 4:14),
-  id_divida           position(15:24),
-  tipo_divida         position(25:25),
-  dataven             position(26:33)    "to_date(:dataven, 'DDMMYYYY')",
-  datapag             position(34:41)    "to_date(:datapag, 'DDMMYYYY')",
-  valor               position(42:58)    "to_number(:valor)/100",
-  encargos            position(59:75)    "to_number(:encargos)/100"
-)
+REGEXP_REPLACE(nome, '^(\w+) .* (\w+)$', '\1 \2')
 ~~~
 
 
-------
+
+
+
 
 Trace
 -----
@@ -2897,7 +2861,7 @@ SELECT * FROM v$sql WHERE sql_text LIKE UPPER('SELECT ...%');
 ~~~
 
 
-------
+
 
 Database link
 -------------
@@ -2966,9 +2930,9 @@ pivot
 order by sinal, descricao;
 ~~~
 
-------
 
-# Chaves primárias compostas
+
+## Chaves primárias compostas
 
 ~~~sql
 SELECT uc.table_name, constraint_name, listagg(ucc.column_name, ', ') within group (order by ucc.position)
@@ -2979,7 +2943,7 @@ group by uc.table_name, constraint_name
 having count(*) > 1;
 ~~~
 
-# Chaves primárias que não são numéricas
+## Chaves primárias que não são numéricas
 
 ~~~sql
 SELECT uc.constraint_name, utc.table_name, utc.column_name, utc.data_type
@@ -2992,7 +2956,7 @@ order by 1, 2, 3, 4;
 ~~~
 
 
-------
+
 
 EXECUTE IMMEDIATE
 -----------------
@@ -3011,7 +2975,7 @@ using reg.table_owner, reg.table_name, reg.timestamp_local;
 
 Importante: O **nome** dos binds não importa. A **ordem** dos parâmetros em using deve ser a mesma das variáveis de BIND usadas na query.
 
-------
+
 
 CUSTOM EXCEPTION
 ----------------
@@ -3035,10 +2999,9 @@ EXCEPTION
 END;
 ~~~
 
-------
 
-Administração (DBA)
--------------------
+
+## Administração (DBA)
 
 Conectar como DBA:
 
@@ -3052,7 +3015,7 @@ Exportar todos os objetos do banco sem os dados:
 EXP.EXE login/password@TNSNAME file=entire_db.dmp owner=(scott, my_user, user2) rows=n grants=y triggers=y
 ~~~
 
-------
+
 
 Ao criar um índice ocorre o seguinte erro pois a tabela está em uso:
 
@@ -3063,9 +3026,9 @@ Este comando faz com que a criação do índice aguarde a tabela ficar disponív
     alter session set DDL_LOCK_TIMEOUT = 60;
 
 
-------
 
-# Procedimento "Kamikaze"
+
+## Procedimento "Kamikaze"
   
 Procedimento que executa uma vez e se auto-destrói
 
@@ -3093,9 +3056,9 @@ end;
 /
 ~~~
 
-------
 
-# MERGE INTO ...
+
+## MERGE INTO ...
 
 Faz inserção/atualização de registros de uma tabela para outra. Exemplos:
 
@@ -3122,9 +3085,9 @@ WHEN NOT MATCHED THEN
   VALUES (b.id_loja_grupo, b.id_loja, b.incluir_filiais);
 ~~~
 
-------
 
-# Usando aspas no estilo "PERL" (Oracle 10g +):
+
+## Usando aspas no estilo "PERL" (Oracle 10g +):
 
 ~~~sql
 BEGIN
@@ -3145,9 +3108,9 @@ end;
 /
 ~~~
 
-------
 
-# Operações em massa (BULK)
+
+## Operações em massa (BULK)
 
 Exemplos BULK COLLECT / FETCH / LIMIT / INSERT / etc.
 
@@ -3217,10 +3180,7 @@ END;
 ~~~
 
 
-------
-
-
-# Desvio usando exception 
+## Desvio usando exception 
 
 ~~~sql
 DECLARE
@@ -3253,7 +3213,7 @@ END;
 /
 ~~~
 
-# Desvio usando goto... /ô>
+## Desvio usando goto... /ô>
 
 ~~~sql
 BEGIN
@@ -3279,9 +3239,8 @@ END;
 /
 ~~~
 
-========================================================================
 
-# Exportar privilégios
+## Exportar privilégios
 
 "Exportar" privilégios aplicados em uma base para gerar script a ser executado em outra.
 
@@ -3304,104 +3263,7 @@ SELECT 'GRANT ' || LISTAGG(privilege, ',') WITHIN GROUP (ORDER BY privilege) || 
  GROUP BY owner, table_name, grantee;
 ~~~ 
 
-========================================================================
-
-PROFILER
-========
-
-Pré-requisitos:
-
-- Ter acesso à package dbms_profiler
-- Ter criadas as tabelas do profiler no schema local ($ORACLE_HOME/rdbms/admin/proftab.sql)
-
-Exemplo de utilização:
-
-~~~sql
-ALTER session set TIMED_STATISTICS = true;
-
-declare
-  x integer;
-  q integer := 0;
-BEGIN
-  x:=dbms_profiler.start_profiler('Test Profiler');
-  for reg in ( select * from table(fnc_arquivo_0104(70954)) ) loop
-    q := q + 1;
-  end loop;
-  dbms_output.put_line(q);
-  x:=dbms_profiler.flush_data;
-  x:=dbms_profiler.stop_profiler;
-end;
-/
-~~~
-
-Execuções:
-
-~~~sql
-SELECT a.runid,
-       substr(b.run_comment, 1, 30) as run_comment,
-       decode(a.unit_name, '', '<anonymous>',
-             substr(a.unit_name,1, 30)) as object_name,
-       a.total_time,
-       TO_CHAR(a.total_time/1000000, '99999.99') as msec,
-       TO_CHAR(100*a.total_time/b.run_total_time, '999.9') as pct
-from plsql_profiler_units a, plsql_profiler_runs b
-where a.runid=b.runid
-order by a.runid asc;
-~~~
-
-Tempo gasto por unidade
-
-~~~sql
-SELECT u.UNIT_NUMBER
-     , u.UNIT_TYPE
-     , u.UNIT_OWNER
-     , u.UNIT_NAME
-     , sum(d.TOTAL_TIME) / 1000000000 as segundos
-     , count(*) AS linhas
-from plsql_profiler_units u, plsql_profiler_data d
-where u.runid = d.runid
-  and u.unit_number = d.unit_number
-  and u.runid = &1
-group by u.UNIT_NUMBER
-     , u.UNIT_TYPE
-     , u.UNIT_OWNER
-     , u.UNIT_NAME
-     , u.runid
-order by segundos;
-~~~
-
-Tempo gasto por linha:
-
-~~~sql
-SELECT u.UNIT_NAME
-     , d.LINE#
-     , d.TOTAL_TIME / 1000000000 as segundos
-     , s.text
-from plsql_profiler_units u, plsql_profiler_data d, user_source s
-where u.runid = d.runid
-  and u.unit_number = d.unit_number
-  and u.runid = &1
-  and u.UNIT_NAME = '&2'
-  and u.unit_name = s.name
-  and d.line# = s.line
-order by segundos;
-undef 1
-undef 2
-~~~
-
-=======
-
-# Erro "PLS-00907: cannot load library unit"
-
-Como SYS:
-
-~~~sql
-alter system flush shared_pool;
-~~~
-
-=======
-
-# XML -> Tabela
+## XML
 
 Transformando XML em uma tabela:
 
@@ -3418,9 +3280,7 @@ SELECT to_number(extractvalue(value(x), 'cliente/id')) as id
        ) x;
 ~~~
 
-=======
-
-# Criptografia e Hash
+## Criptografia e Hash
 
 Calcular Hash MD5 de uma string
 
@@ -3429,3 +3289,149 @@ exec dbms_output.put_line(rawtohex(dbms_obfuscation_toolkit.md5(input => utl_raw
 
 exec dbms_output.put_line(rawtohex(dbms_crypto.hash(src => utl_raw.cast_to_raw('6278929999999999'), typ => dbms_crypto.hash_md5)));
 ~~~
+
+## "PLS-00907: cannot load library unit"
+
+Como SYS:
+
+~~~sql
+alter system flush shared_pool;
+~~~
+
+
+# SQL LOADER
+
+Primeiro a tabela deve ser criada e deve estar vazia. Exemplo:
+
+~~~sql
+CREATE table tmp_crivo (
+  cpf   varchar2(11) not null primary key,
+  renda number(10,2) not null
+);
+~~~
+
+## Exemplos do comando para importação:
+
+    sqlldr usuario/senha@servidor control=CONTROLE.ctl bad=ERROS.bad discard=IGNORADO.dsc log=MENSAGENS.log
+
+As diretivas acima são bad (linhas com erro), discard (linhas não processadas), log (mensagens e erros na importação)
+
+## Exemplos do arquivo de controle (*.ctl):
+
+### Arquivo simples somente com um campo
+
+~~~
+load data
+ infile 'C:\Temp\CPFs_ja_importados.txt'
+ into table tmp_cpf_vcom
+ FIELDS TERMINATED BY "," OPTIONALLY ENCLOSED BY '"'
+ TRAILING NULLCOLS
+ ( cpf )
+~~~
+
+### Arquivo csv com vários campos, sem formatação especifica
+
+~~~
+load data
+ infile 'C:\Temp\cartoes_cvv_gold.csv'
+ into table tmp_22188
+ FIELDS TERMINATED BY "," OPTIONALLY ENCLOSED BY '"'
+ TRAILING NULLCOLS
+ ( ciccli, nome, id_cartao_antigo, layout, titularidade, id_cliente_conjunto )
+~~~
+
+### Arquivo csv com formatação específica em cada campo
+
+~~~
+load data
+ infile 'C:\temp\baixas_vcom_20130502.csv'
+ into table tmp_baixas_vcom
+ FIELDS TERMINATED BY "," OPTIONALLY ENCLOSED BY '"'
+ TRAILING NULLCOLS
+ ( nome_cred             "trim(:nome_cred)"
+ , nome_fili_distr       "trim(:nome_fili_distr)"
+ , sigla
+ , cod_rec
+ , contrato_tit
+ , numero_parc
+ , tipo_pagamento
+ , vcto_parc             "to_date(:vcto_parc,   'YYYY-MM-DD HH24:MI:SS    ')"
+ , dt_pgto_rec           "to_date(:dt_pgto_rec, 'YYYY-MM-DD HH24:MI:SS    ')"
+ , atraso
+ , valor_atualizado      "to_number(replace(:valor_atualizado,    '.', ''))"
+ , valor_recebido_rec    "to_number(replace(:valor_recebido_rec,  '.', ''))"
+ , percentual_comissao   "to_number(replace(:percentual_comissao, '.', ''))"
+ , comissao              "to_number(replace(:comissao,            '.', ''))"
+ )
+~~~
+
+### Arquivo csv com 2 campos
+
+- Um deles é numérico na origem mas deve ser formatado como char ao inserir na tabela
+
+~~~
+load data
+ infile 'C:\Temp\crivo_renda.csv'
+ into table usuario.tmp_crivo
+ FIELDS TERMINATED BY ";" OPTIONALLY ENCLOSED BY '"'
+ TRAILING NULLCOLS
+ ( cpf                   "to_char(:cpf, 'fm00000000000')"
+ , renda                 "to_number(:renda)"
+ )
+~~~
+
+### Exemplo complexo
+
+- Múltiplos arquivos de entrada
+- Múltiplas tabelas de destino (com relação de mestre-detalhe)
+- Campos posicionais de vários formatos
+
+~~~
+load data
+infile 'c:\temp\cobranca\chefaly\2009\r0063001.cob'
+infile 'c:\temp\cobranca\chefaly\2009\r0063002.cob'
+infile 'c:\temp\cobranca\chefaly\2009\r0063003.cob'
+append
+trailing nullcols
+
+into table chefaly_arquivo
+when (1:2) = 'HD'
+(
+  id_chefaly_arquivo  "seq_id_chefaly_arquivo.nextval",
+  id_cobradora        position(3  :  6),
+  data_arquivo        position(157:164)  "to_date(:data_arquivo, 'DDMMYYYY')",
+  numero_arquivo      position(165:172)  "to_number(:numero_arquivo)"
+)
+
+into table chefaly_faixa
+when (1:2) = 'FX'
+(
+  id_chefaly_arquivo  "seq_id_chefaly_arquivo.currval",
+  faixa_ini           position(3: 6)     "to_number(:faixa_ini)",
+  faixa_fim           position(7:10)     "to_number(:faixa_fim)"
+)
+
+into table chefaly_totais
+when (1:2) = 'TR'
+(
+  id_chefaly_arquivo  "seq_id_chefaly_arquivo.currval",
+  qtd_clientes        position( 3:12)    "to_number(:qtd_clientes)",
+  qtd_dividas         position(13:22)    "to_number(:qtd_dividas)",
+  total_arquivo       position(23:39)    "to_number(:total_arquivo)/100"
+)
+
+into table chefaly_detalhe
+when (1:2) = 'DV'
+(
+  id_chefaly_arquivo  "seq_id_chefaly_arquivo.currval",
+  cod_operacao        position( 3: 3),
+  ciccli              position( 4:14),
+  id_divida           position(15:24),
+  tipo_divida         position(25:25),
+  dataven             position(26:33)    "to_date(:dataven, 'DDMMYYYY')",
+  datapag             position(34:41)    "to_date(:datapag, 'DDMMYYYY')",
+  valor               position(42:58)    "to_number(:valor)/100",
+  encargos            position(59:75)    "to_number(:encargos)/100"
+)
+~~~
+
