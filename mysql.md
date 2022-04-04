@@ -1,4 +1,8 @@
-# MySQL / MariaDB
+---
+title: MySQL
+---
+
+# Service
 
 Restart service (on Ubuntu):
 

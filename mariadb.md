@@ -1,5 +1,6 @@
-# MariaDB
-
+---
+title: MariaDB
+---
 
 ## Running MariaDB from binaries (portable)
 

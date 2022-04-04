@@ -1,4 +1,6 @@
-# Swagger
+---
+title: Swagger
+---
 
 ## Swagger Codegen
 

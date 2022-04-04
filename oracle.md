@@ -1,8 +1,11 @@
-# Oracle
+---
+title: Oracle
+---
+
 
 Referência e exemplos (snippets) de comandos SQL e PL/SQL e outras ferramentas para Oracle Database.
 
-> **Aviso:** Os comandos foram usados e testados nas versões 9, 10 e 11.
+> **Aviso:** Os comandos foram usados e testados nas versões 9 e 11.
 
 # SQL
 
@@ -382,7 +385,51 @@ FROM tab1 a FULL OUTER JOIN tab2 b
   ON a.c1 = b.c1 AND a.c2 = b.c2;
 ~~~
 
+## Non-Equijoins
 
+~~~sql
+CREATE TABLE job_grades (
+  grade        CHAR(1)      NOT NULL,
+  lowest_sal   NUMBER(10,2) NOT NULL,
+  highest_sal  NUMBER(10,2) NOT NULL
+);
+
+ALTER TABLE job_grades
+ADD (CONSTRAINT job_grades_pk PRIMARY KEY (grade));
+
+INSERT INTO job_grades VALUES ('A', 1000, 2999);
+INSERT INTO job_grades VALUES ('B', 3000, 5999);
+INSERT INTO job_grades VALUES ('C', 6000, 9999);
+INSERT INTO job_grades VALUES ('D', 10000, 14999);
+INSERT INTO job_grades VALUES ('E', 15000, 24999);
+INSERT INTO job_grades VALUES ('F', 25000, 40000);
+
+SELECT e.last_name, e.salary, jg.grade
+FROM employees e, job_grades jg
+WHERE e.salary BETWEEN jg.lowest_sal AND jg.highest_sal;
+~~~
+
+## Natural Joins vs. Equijoin
+
+~~~sql
+select department_id, department_name, location_id, city
+from departments natural join locations;
+
+select department_id, department_name, locations.location_id, city
+from departments, locations
+where departments.location_id = locations.location_id;
+
+select department_id, department_name, locations.location_id, city
+from departments join locations
+on departments.location_id = locations.location_id;
+
+SELECT employee_id, city, department_name
+FROM employees e
+JOIN departments d
+ON   d.department_id = e.department_id
+JOIN locations l
+ON   d.location_id = l.location_id;
+~~~
 
 Hints
 -----
@@ -3380,6 +3427,64 @@ load data
  )
 ~~~
 
+### Arquivos posicionais
+
+- Exemplo de importação de base dos correios (DNE)
+
+`dne_localidade.ctl`:
+
+~~~
+OPTIONS( bindsize=10240000, READSIZE=10240000, rows=5000000 )
+LOAD DATA
+  INFILE 'C:\DNE_GU\GU\DNE_GU_LOCALIDADES.TXT'
+  BADFILE 'C:\Importa_cep\BAD\DNE_GU_LOCALIDADES.BAD'
+  DISCARDFILE 'C:\Importa_cep\DSC\DNE_GU_LOCALIDADES.DSC'
+  APPEND
+  INTO TABLE dne_localidade
+    WHEN (001:001) = 'D'
+  (dne_loc_nu     position(012:019) INTEGER EXTERNAL,
+   nome           position(020:091) char NULLIF nome=BLANKS "replace(:nome,'''','´')",
+   uf             position(004:005) char NULLIF uf=BLANKS,
+   tipo           position(136:136) char NULLIF tipo=BLANKS,
+   nome_abreviado position(100:135) char NULLIF nome_abreviado=BLANKS     "replace(:nome_abreviado,'''','´')",
+   cep_unico      position(092:099) INTEGER EXTERNAL
+  )
+~~~
+  
+`dne_uf.ctl`:
+
+~~~
+OPTIONS( bindsize=10240000, READSIZE=10240000, rows=5000 )
+LOAD DATA
+  INFILE 'C:\DNE_GU\GU\DNE_GU_UNIDADES_FEDERACAO.TXT'
+  BADFILE 'C:\Importa_cep\BAD\DNE_GU_UNIDADES_FEDERACAO.BAD'
+  DISCARDFILE 'C:\Importa_cep\DSC\DNE_GU_UNIDADES_FEDERACAO.DSC'
+  APPEND
+  INTO TABLE dne_UF
+    WHEN (001:001) = 'D'
+  (uf   position(004:005) char NULLIF uf=BLANKS,
+   nome position(010:030) char NULLIF nome=BLANKS
+  )
+~~~
+
+`dne_bairro.ctl`:
+
+~~~
+OPTIONS( bindsize=10240000, READSIZE=10240000, rows=5000000 )
+LOAD DATA
+  INFILE 'C:\DNE_GU\GU\DNE_GU_BAIRROS.TXT'
+  BADFILE 'C:\Importa_cep\BAD\DNE_GU_BAIRROS.BAD'
+  DISCARDFILE 'C:\Importa_cep\DSC\DNE_GU_BAIRROS.DSC'
+  APPEND
+  INTO TABLE dne_bairro
+    WHEN (001:001) = 'D'
+  (dne_bai_nu       position(095:102) INTEGER EXTERNAL NULLIF dne_bai_nu=BLANKS,
+   dne_loc_nu       position(010:017) INTEGER EXTERNAL NULLIF dne_loc_nu=BLANKS,
+   nome             position(103:174) char NULLIF nome=BLANKS,
+   nome_abreviado   position(175:210) char NULLIF nome_abreviado=BLANKS
+  )
+~~~
+
 ### Exemplo complexo
 
 - Múltiplos arquivos de entrada
@@ -3433,5 +3538,22 @@ when (1:2) = 'DV'
   valor               position(42:58)    "to_number(:valor)/100",
   encargos            position(59:75)    "to_number(:encargos)/100"
 )
+~~~
+
+# Oracle XE
+
+## Resumo da instalação inicial
+
+- Pasta de Destino: C:\oraclexe\
+- Oracle Home: C:\oraclexe\app\oracle\product\11.2.0\server\
+- Oracle Base: C:\oraclexe\
+- Porta para o 'Oracle Database Listener': 1521
+- Porta para o 'Oracle Services for Microsoft Transaction Server': 2030
+- Porta para o 'Oracle HTTP Listener': 8080
+
+## Ativando o usuário de exemplo HR
+
+~~~sql
+ALTER USER hr ACCOUNT UNLOCK IDENTIFIED BY hr;
 ~~~
 

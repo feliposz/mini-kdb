@@ -1,4 +1,6 @@
-# Ruby on Rails
+---
+title: Ruby on Rails
+---
 
 ## Concepts
 
