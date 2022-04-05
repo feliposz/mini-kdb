@@ -178,3 +178,9 @@ npm adduser --registry http://npm.xxxxx.com.br
 [Repositories for user](https://docs.github.com/en/rest/reference/repos#list-repositories-for-a-user)
 
     https://api.github.com/users/USERNAME/repos
+
+## Windows Shortcuts
+
+Ferramenta não-documentada para criação de atalhos do Windows:
+
+    "C:\Program Files\Git\mingw64\bin\create-shortcut.exe" --work-dir "C:\path\to\files" --arguments "--myarg=myval" "C:\path\to\files\file.ext" "C:\path\to\shortcuts\shortcut.lnk"
