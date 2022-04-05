@@ -4,7 +4,7 @@ title: Go
 
 Set environment variables
 
-~~~sh
+~~~bat
 GOBIN=C:\Go\bin
 GOPATH=C:\Users\USERNAME\go
 ~~~

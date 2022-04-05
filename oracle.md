@@ -14,10 +14,10 @@ Referência e exemplos (snippets) de comandos SQL e PL/SQL e outras ferramentas 
 ~~~sql
 SELECT [DISTINCT] campos 
 FROM tabelas
-WHERE condições/joins
+WHERE condicoes/joins
 GROUP BY campos de agrupamento
-HAVING condições envolvendo funções de grupo
-ORDER BY campo de ordenação [DESC]
+HAVING condicoes envolvendo funcoes de grupo
+ORDER BY campo de ordenacao [DESC]
 ~~~
 
 ## Operadores lógicos
@@ -262,7 +262,7 @@ Remoção de dados:
 ~~~sql
 DELETE FROM tabela -- Atenção: remove TODOS os registros se não usar cláusula WHERE
 
-DELETE FROM tabela WHERE condições
+DELETE FROM tabela WHERE condicoes
 
 TRUNCATE tabela -- Remove os dados liberando espaço. Obs: não funciona se constraints estiverem ativas.
 
@@ -277,7 +277,7 @@ Atualização:
 ~~~sql
 UPDATE tabela
 SET campo1 = valor1, campo2 = valor2
-WHERE condições
+WHERE condicoes
 ~~~
 
 Sequences:
@@ -506,7 +506,7 @@ Criando tabela a partir de outra tabela/consulta:
 ~~~sql
 CREATE TABLE copia_tabela AS
 SELECT campo1, campo2, campo3 FROM outra_tabela
-WHERE condições...
+WHERE condicoes...
 ~~~
 
 Criar uma tabela vazia com os mesmos campos de outra tabela:
@@ -539,7 +539,7 @@ Criação de View:
 CREATE VIEW nome_view AS
 SELECT campo1, campo2, campo3, campo4 campo_renomeado
 FROM tabela
-WHERE condições...
+WHERE condicoes...
 ~~~
 
 Acrescentando-se a opção WITH CHECK OPTION CONSTRAINT nome_constraint_ck, ao inserir/alterar valores na view será verificado se os valores atendem as condições da cláusula WHERE, ou os valores inseridos na tabela base da view não ficará visível após operação.
@@ -857,11 +857,11 @@ Criando:
 
 ~~~sql
 CREATE SEQUENCE nome_sequencia
-INCREMENT BY 1   (valor para incrementar)
-START WITH 51    (valor de início da seq)
-MAXVALUE 9999999 (valor máximo a que deve chegar)
-NOCACHE          (???)
-NOCYCLE          (???)
+INCREMENT BY 1   -- (valor para incrementar)
+START WITH 51    -- (valor de início da seq)
+MAXVALUE 9999999 -- (valor máximo a que deve chegar)
+NOCACHE
+NOCYCLE
 ~~~
 
 Alterando:
@@ -1453,9 +1453,9 @@ Loops
 ~~~sql
 LOOP
   abc;
-  EXIT WHEN condição; -- pode ser feito em todos os tipos de loop
+  EXIT WHEN condicao; -- pode ser feito em todos os tipos de loop
   def;
-  IF condição THEN
+  IF condicao THEN
      ...
      ...
      EXIT; -- sai do loop diretamente
@@ -2885,7 +2885,7 @@ set autotrace off
 
 Exemplo de uma saída:
 
-~~~sql
+~~~
 Plano de Execução
 ----------------------------------------------------------
 
