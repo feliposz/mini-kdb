@@ -1,7 +1,8 @@
 title: Mini KDB
-author: Felipo Soranz
+author: Felipo Soranz (Copyright © 2006-2022)
 description: A collection of notes on languages, tools and various topics.
-baseurl: "mini-kdb"
-url: feliposz.github.io
-github_username:  feliposz
+baseurl: /mini-kdb/
+domain: feliposz.github.io
+url: https://feliposz.github.io
+github_username: feliposz
 theme: minima
