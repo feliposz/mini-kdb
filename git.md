@@ -184,3 +184,9 @@ npm adduser --registry http://npm.xxxxx.com.br
 Ferramenta não-documentada para criação de atalhos do Windows:
 
     "C:\Program Files\Git\mingw64\bin\create-shortcut.exe" --work-dir "C:\path\to\files" --arguments "--myarg=myval" "C:\path\to\files\file.ext" "C:\path\to\shortcuts\shortcut.lnk"
+
+## Useful snippets
+
+    git log --all --decorate --oneline --graph
+    git log --oneline --stat --reverse
+    git log -p --stat --reverse
