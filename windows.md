@@ -572,5 +572,75 @@ When you are done press Alt-Tilde again to switch back to English.
 To achieve the same result when in Japanese mode, press Control - ~.
 
 
+Teclas multi-midia
+-----------------
+
+Fonte: https://www.tenforums.com/tutorials/167135-how-customize-disable-app-keys-keyboard-windows-10-a.html
+
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AppKey\
+
+Use "ShellExecute" to Set Key to Run Specified App or Command
+
+Key|Description
+---|-------------
+1	 |Back (Web browser)
+2	 |Forward (Web browser)
+3	 |Refresh (Web browser)
+4	 |Stop (Web browser)
+5	 |Search
+6	 |Favorites (Web browser)
+7	 |Web Home (Web browser)
+8	 |Mute Volume
+9	 |Volume Down
+10 |Volume Up
+11 |Next Track (media)
+12 |Previous Track (media)
+13 |Stop (media)
+14 |Pause/Play (media)
+15 |Mail
+16 |Media Select
+17 |This PC or My Computer
+18 |Calculator
+19 |Bass Down
+20 |Bass Boost
+21 |Bass Up
+22 |Treble Down
+23 |Treble Up
+24 |Mute Microphone
+25 |Volume Down Microphone
+26 |Volume Up Microphone
+27 |Help
+28 |Find
+29 |New
+30 |Open
+31 |Close
+32 |Save
+33 |Print
+34 |Undo
+35 |Redo
+36 |Copy
+37 |Cut
+38 |Paste
+39 |Reply (mail)
+40 |Forward (mail)
+41 |Send (mail)
+42 |Spell Check
+43 |Toggle Dictation on/off
+44 |Toggle Microphone on/off
+45 |Correction List
+46 |Play (media)
+47 |Pause (media)
+48 |Record (media)
+49 |Fast Forward (media)
+50 |Rewind (media)
+51 |Channel Up (media)
+52 |Channel Down (media)
+53 |Delete
+54 |Flip 3D
 
 
+Limpar pasta WinSxS
+------------------
+
+    Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase
+    
