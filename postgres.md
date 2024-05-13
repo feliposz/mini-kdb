@@ -258,7 +258,6 @@ psql -v ON_ERROR_STOP=1 -U postgres <<-EOSQL
 EOSQL
 ```
 
-
 ## Export/import a table with CSV
 
 The command `copy` works with files on the *server*, while `\copy` works with files on the *client*.
@@ -294,4 +293,21 @@ from jsonb_to_recordset((
     from test_json 
     where data @> '[{"id":1}]'
 )) as x (id int, name text, "createdAt" timestamp, "updatedAt" timestamp);
+~~~
+
+
+## Problems
+
+### Don't know the name for login user [source](https://stackoverflow.com/questions/60556957/how-to-check-the-username-of-postgresql-on-windows-10#60559035)
+
+Start PostgreSQL in single-user mode:
+
+```
+C:\Local\Portable\pgsql\bin\postgres.exe --single -D C:\Local\Portable\pgsql\pgsql\data postgres
+```
+
+List users that can login:
+
+~~~sql
+SELECT * FROM pg_authid WHERE rolcanlogin;
 ~~~
